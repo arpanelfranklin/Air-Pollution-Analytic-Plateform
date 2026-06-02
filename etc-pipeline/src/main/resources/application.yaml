@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: etc-pipeline
+  data:
+    mongodb:
+      auto-index-creation: true
+  mongodb:
+    uri: mongodb://localhost:27017/PollutionDataSet
