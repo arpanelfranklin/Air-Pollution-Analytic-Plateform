@@ -1,5 +1,7 @@
 package com.example.air_pollution_analytics.controller;
 
+import com.example.air_pollution_analytics.dto.CountryAQI;
+import com.example.air_pollution_analytics.dto.CountrySummary;
 import com.example.air_pollution_analytics.dto.Stats;
 import com.example.air_pollution_analytics.entity.PollutionData;
 import com.example.air_pollution_analytics.service.PollutionDataService;
@@ -43,9 +45,40 @@ public class DataController {
         return pollutionDataService.dataByCategory(category);
     }
 
+    // overall stats
     @GetMapping("/stats")
     public Stats stats() {
         return pollutionDataService.getStats();
     }
 
+    //Get Top polluted cities
+    @GetMapping("/top-polluted-cities")
+    public List<PollutionData> topPollutedCities(){
+        return pollutionDataService.getTopPollutedCities();
+    }
+
+    //Get Cleanest Cities
+    @GetMapping("/cleanest-cities")
+    public List<PollutionData> cleanestCities(){
+        return pollutionDataService.getCleanestCities();
+    }
+
+
+    //Categor Distribution
+    @GetMapping("/category-stats")
+    public Map<String,Long> categoryStats() {
+        return pollutionDataService.getCategoryStats();
+    }
+
+    // top polluted Country
+    @GetMapping("top-polluted-country")
+    public List<CountryAQI> topPollutedCountry(){
+        return pollutionDataService.getTopPollutedCountry();
+    }
+
+    // country summary
+    @GetMapping("/country-summary/{country}")
+    public CountrySummary countrySummary(@PathVariable String country){
+        return pollutionDataService.getCountrySummary(country);
+    }
 }
