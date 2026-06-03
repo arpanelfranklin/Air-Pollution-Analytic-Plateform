@@ -1,8 +1,3 @@
 spring:
   application:
     name: air-pollution-analytics
-
-  data:
-    mongodb:
-      uri: mongodb://mongo:27017/PollutionDataSet
-      auto-index-creation: true
