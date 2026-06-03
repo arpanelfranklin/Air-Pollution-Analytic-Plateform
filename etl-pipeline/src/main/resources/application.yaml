@@ -1,9 +1,8 @@
 spring:
   application:
     name: etc-pipeline
+
   data:
     mongodb:
+      uri: mongodb://mongo:27017/PollutionDataSet
       auto-index-creation: true
-  mongodb:
-#    uri: mongodb://localhost:27017/PollutionDataSet
-     uri: mongodb://mongo:27017/PollutionDataSet

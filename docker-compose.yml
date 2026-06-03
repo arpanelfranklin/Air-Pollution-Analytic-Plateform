@@ -1,7 +1,6 @@
 services: 
   mongo: 
-    container_name: "mongo"
-    image: mongo:7.0
+    image: mongo
     networks: 
       - air-pollution-nw
     restart : always
@@ -9,18 +8,24 @@ services:
       - 27017:27017
     volumes:
       - mongo-data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
     
   backend:
     build: 
       context: ./backend
-    container_name: air-pollution-backend
+    
     restart: always
     ports: 
       - 8080:8080
     networks: 
       - air-pollution-nw
     depends_on: 
-      - mongo
+      mongo: 
+        condition: service_healthy
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8080/pollution/stats || exit 1"] 
       interval: 10s
@@ -30,14 +35,14 @@ services:
     environment: 
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/PollutionDataSet
   
-  etlPipeline: 
+  etlpipeline: 
     build:
       context: ./etl-pipeline
-    container_name: air-pollution-etl-backend
     networks: 
       - air-pollution-nw
     depends_on: 
-      - mongo
+      mongo: 
+        condition: service_healthy
     restart: "no"
     environment: 
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/PollutionDataSet
@@ -45,6 +50,7 @@ services:
 
 networks: 
   air-pollution-nw:
+    driver: bridge
 volumes:
   mongo-data:
 
