@@ -1,4 +1,4 @@
-package com.example.etc_pipeline.runner;
+package com.example.etl_pipeline.runner;
 
 import com.example.etl_pipeline.entity.PollutionData;
 import com.example.etl_pipeline.service.CSVReaderService;
