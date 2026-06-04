@@ -35,17 +35,17 @@ services:
     environment: 
       SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/PollutionDataSet
   
-  # etlpipeline: 
-  #   build:
-  #     context: ./etl-pipeline
-  #   networks: 
-  #     - air-pollution-nw
-  #   depends_on: 
-  #     mongo: 
-  #       condition: service_healthy
-  #   restart: "no"
-  #   environment: 
-  #     SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/PollutionDataSet
+  etlpipeline: 
+    build:
+      context: ./etl-pipeline
+    networks: 
+      - air-pollution-nw
+    depends_on: 
+      mongo: 
+        condition: service_healthy
+    restart: "no"
+    environment: 
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/PollutionDataSet
 
 
 networks: 
