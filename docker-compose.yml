@@ -1,6 +1,6 @@
 services: 
   mongo: 
-    image: mongo
+    image: mongo:7
     networks: 
       - air
     restart : always

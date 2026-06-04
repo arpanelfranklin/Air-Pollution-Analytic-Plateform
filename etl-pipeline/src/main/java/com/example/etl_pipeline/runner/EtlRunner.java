@@ -21,7 +21,8 @@ public class EtlRunner implements CommandLineRunner {
     public void run(String... args){
         System.out.println("ETL Pipeline is running...");
 
-        List<String[]> rows =  csvReaderService.readCsv("src/main/resources/datasets/globalAirPollutionDataset.csv");
+       List<String[]> rows =
+        csvReaderService.readCsv();
         List<PollutionData> pollutionDataList = new ArrayList<>();
         for(String[] row: rows){
             PollutionData pollutionData = pollutionTransformService.transform(row);
