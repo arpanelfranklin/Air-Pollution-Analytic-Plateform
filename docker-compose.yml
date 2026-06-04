@@ -39,7 +39,7 @@ services:
     build:
       context: ./etl-pipeline
     networks: 
-      - air-pollution-nw
+      - air
     depends_on: 
       mongo: 
         condition: service_healthy
