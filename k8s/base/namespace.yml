@@ -1,4 +1,4 @@
-kind: Deployment
+kind: Namespace
 apiVersion: v1
 metadata:
-  airpollution
+  name: airpollution
