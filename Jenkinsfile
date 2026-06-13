@@ -1,75 +1,53 @@
 pipeline{
-    agent: any
+    agent any
     stages{
-        stage("checkout"){
-            git url: "https://github.com/arpanelfranklin/Air-Pollution-Analytic-Plateform.git", 
-            branch: "main"
-        }
-
-        stage("build backend"){
+        stage("Checkout"){
             steps{
-                echo "Building backend"
+                git url: "https://github.com/arpanelfranklin/Air-Pollution-Analytic-Plateform.git",
+                branch: "main"
             }
         }
-
-        stage("Build ETL-Pipeline"){
+        
+        stage("Building backend"){
             steps{
-                echo "Building etl-pipeline"
+                echo "building backend"
             }
         }
-        stage("unit test"){
+        stage("Building ETL-pipeline"){
             steps{
-                echo "unit testing"
+                echo "building etl-pipeline"
             }
         }
-
-        stage("sonarqube analysis"){
+        stage("SonarQube analysis"){
             steps{
-                echo "sonarqube analysis"
+                echo "SonarQube analysis"
             }
         }
-        stage("trivy file system scan"){
+        stage("Trivy file system scan"){
             steps{
-                echo "trivy file system scan"
+                echo "Trivy file system scan"
             }
         }
-
-        stage("docker build backend"){
+        stage("Docker build backend"){
             steps{
-                echo "Docker buld backend"
+                sh "docker build -t apap-backend ./backend"
             }
         }
-
-        stage("docker build etl pipeline"){
+        stage("Docker build etl-pipeline"){
             steps{
-                echo "docker build backend"
+                echo "Docker build etl piepline"
             }
         }
-
-        stage("trivy scan"){
+        stage("Docker push"){
+           steps{
+               echo "Docker push"
+           }
+        }
+        stage("Update k8s menifest"){
             steps{
-                echo "container security scan"
+                echo "update menifest"
             }
         }
-        stage("docker push"){
-            steps{
-                echo "docker push"
-            }
-        }
-        stage("update k8s menifest"){
-            steps{
-                echo "push updated menifest"
-            }
-        }
-
-    }
-    post {
-        success{
-            echo "build success"
-        }
-
-        failure {
-            echo "build failed"
-        }
+        
     }
 }
