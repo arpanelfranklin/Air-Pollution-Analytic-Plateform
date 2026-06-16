@@ -108,21 +108,23 @@ pipeline{
         }
        
         stage("Docker Push of image"){
-            withCredentials([usernamePassword(
+            steps{
+                withCredentials([usernamePassword(
                 credentialsId: "dockerHubCreds",
-                passwordVariable: "dockerHubPass"
+                passwordVariable: "dockerHubPass",
                 usernameVariable: "dockerHubUser"
             )]){
                 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
                 sh "docker push arpanel/apap-backend:v${env.VERSION}-${env.GIT_SHA}"
                 sh "docker push arpanel/apap-etl-pipeline:v${env.VERSION}-${env.GIT_SHA}"
             }
+            }
         }
 
         stage("Update k8s menifest files"){
             steps{
                 sh """
-                    sed -i "s|image: arpanel/apap-backend:.*|image: arpanel/apap-backend:v${VERSION}-${GIT_SHA}|" k8s/backend/deployment.yml \
+                    sed -i "s|image: arpanel/apap-backend:.*|image: arpanel/apap-backend:v${VERSION}-${GIT_SHA}|" k8s/backend/deployment.yml &&
                     sed -i "s|image: arpanel/apap-etl-pipeline:.*|image: arpanel/apap-etl-pipeline:v${VERSION}-${GIT_SHA}|" k8s/etl/cronjob.yml
                 """
                 
@@ -130,7 +132,26 @@ pipeline{
         }
         stage ("Push updated k8s to github"){
             steps{
-                echo "Git pushed"
+                withCredentials([
+                usernamePassword(
+                    credentialsId: "gitHubCreds",
+                    usernameVariable: "GIT_USER",
+                    passwordVariable: "GIT_PAT"
+                )
+            ]){
+                sh '''
+                    git config user.name "Jenkins"
+                    git config user.email "jenkins@local"
+
+                    git status
+
+                    git add k8s/
+
+                    git commit -m "Version update of image via Jenkins " || true
+
+                    git push https://${GIT_USER}:${GIT_PAT}@github.com/arpanelfranklin/Air-Pollution-Analytic-Plateform.git HEAD:main
+                '''
+                }
             }
         }
         
