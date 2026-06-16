@@ -15,7 +15,7 @@ spec:
     spec: 
       containers:
       - name: container 
-        image: arpanel/apap-backend:v1.0
+        image: arpanel/apap-backend:latest
         ports: 
           - containerPort: 8080
         env: 
