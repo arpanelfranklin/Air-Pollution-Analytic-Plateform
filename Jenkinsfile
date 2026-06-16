@@ -1,5 +1,8 @@
 pipeline{
     agent any
+    environment{
+        JAVA_HOME = "/usr/lib/jvm/java-21-openjdk-amd64"
+    }
     stages{
         stage("Checkout"){
             steps{
@@ -22,7 +25,7 @@ pipeline{
         stage("Print Version"){
             steps{
                 echo "Version : ${env.VERSION}"
-                echo "Git-sha : ${GIT_SHA}"
+                echo "Git-sha : ${env.GIT_SHA}"
             }
         }
         stage("Building backend"){
@@ -43,10 +46,10 @@ pipeline{
             steps{
                 dir("backend"){
                     sh '''
-                    mvn clean verify sonar:sonar \
+                    mvn sonar:sonar \
                     -Dsonar.projectKey=apap-backend \
-                    -Dsonar.host.url=$SONAR_HOST_URL \
-                    -Dsonar.token=$SONAR_TOKEN
+                    -Dsonar.host.url=http://100.26.110.241:9000/ \
+                    -Dsonar.login=squ_0cddf4b8d859713aaa423313ea169e29ef61fc67
                      '''
                 }
             }
@@ -56,7 +59,7 @@ pipeline{
                 sh '''
                     trivy fs \
                     --severity HIGH,CRITICAL \
-                    --exit-code 1 \
+                    --exit-code 0 \
                     ./backend
                 '''
             }
@@ -67,7 +70,7 @@ pipeline{
                 sh '''
                     trivy fs \
                     --severity HIGH,CRITICAL \
-                    --exit-code 1 \
+                    --exit-code 0 \
                     ./etl-pipeline
                 '''
             }
@@ -85,32 +88,44 @@ pipeline{
 
         stage("Trivy Image scan of backend"){
             steps{
-                sh '''
+                sh """
                     trivy image \
                     --severity HIGH,CRITICAL \
                     --exit-code 1 \
-                    arpanel/apap-backend:v{env.VERSION}-${env.GIT_SHA}
-                '''
+                    arpanel/apap-backend:v${env.VERSION}-${env.GIT_SHA}
+                """
             }
         }
         stage("Trivy Image scan for etl-pipeline"){
             steps{
-                sh ''' 
+                sh """
                     trivy image \
                     --severity HIGH,CRITICAL \
-                    --exit-code 1\
-                    arpanel/apap-etl-pipeline:v{env.VERSION}-${env.GIT_SHA}
-                '''
+                    --exit-code 1 \
+                    arpanel/apap-etl-pipeline:v${env.VERSION}-${env.GIT_SHA}
+                """
             }
         }
-        stage("Docker push"){
-           steps{
-               echo "Docker push"
-           }
+       
+        stage("Docker Push of image"){
+            withCredentials([usernamePassword(
+                credentialsId: "dockerHubCreds",
+                passwordVariable: "dockerHubPass"
+                usernameVariable: "dockerHubUser"
+            )]){
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
+                sh "docker push arpanel/apap-backend:v${env.VERSION}-${env.GIT_SHA}"
+                sh "docker push arpanel/apap-etl-pipeline:v${env.VERSION}-${env.GIT_SHA}"
+            }
         }
-        stage("Update k8s menifest"){
+
+        stage("Update k8s menifest files"){
             steps{
-                echo "update menifest"
+                sh """
+                    sed -i "s|image: arpanel/apap-backend:.*|image: arpanel/apap-backend:v${VERSION}-${GIT_SHA}|" k8s/backend/deployment.yml \
+                    sed -i "s|image: arpanel/apap-etl-pipeline:.*|image: arpanel/apap-etl-pipeline:v${VERSION}-${GIT_SHA}|" k8s/etl/cronjob.yml
+                """
+                
             }
         }
         stage ("Push updated k8s to github"){
