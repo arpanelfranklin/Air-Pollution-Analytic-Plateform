@@ -16,7 +16,7 @@ spec:
       containers: 
         - name: etl-pipeline 
           imagePullPolicy: Always 
-          image: arpanel/apap-etl-pipeline:latest
+          image: arpanel/apap-etl-pipeline:v1.0.0-eff0424
           env:
           - name: SPRING_DATA_MONGODB_URI
             valueFrom:
