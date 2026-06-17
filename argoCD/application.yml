@@ -1,0 +1,19 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application 
+metadata: 
+  name: apap-app-application 
+  namespace: argocd
+spec: 
+  project: air-pollution-analytic-project
+  source: 
+    repoURL: https://github.com/arpanelfranklin/Air-Pollution-Analytic-Plateform.git
+    targetRevision: main
+    path : argoCD/appOfApps
+  destination: 
+    server: https://kubernetes.default.svc
+    namespace: airpollution
+  syncPolicy: 
+    automated: 
+      prune: true
+      selfHeal: true 
+      

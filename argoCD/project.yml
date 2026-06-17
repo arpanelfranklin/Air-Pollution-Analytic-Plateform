@@ -1,0 +1,23 @@
+kind: AppProject
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: air-pollution-analytic-project
+  namespace: argocd
+spec: 
+  description: "This is a project for argoCD of the APAP application"
+  sourceRepos:
+    - https://github.com/arpanelfranklin/Air-Pollution-Analytic-Plateform.git
+  destinations: 
+    - namespace: airpollution
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist: 
+    - group: "*"
+      kind: "*"
+  namespaceResourceWhitelist: 
+    - group: "*"
+      kind: "*"
+  roles: 
+    - name: apap-app-admins
+      description: "admins team from apap-app"
+      policies:
+       - p, proj:air-pollution-analytic-project:apap-app-admins, applications, *, air-pollution-analytic-project/*, allow

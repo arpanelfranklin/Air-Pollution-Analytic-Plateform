@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application 
+metadata: 
+  name: database-applicaiton 
+  namespace: argoCD
+spec: 
+  project: air-pollution-analytic-project
+  source: 
+    repoURL: https://github.com/arpanelfranklin/Air-Pollution-Analytic-Plateform.git
+    targetRevision: main
+    path: k8s/database
+  destination: 
+    server:  https://kubernetes.default.svc
+    namespace: airpollution 
+  syncPolicy: 
+   automated: 
+    prune: true
+    selfHeal: true
+
+
+
+
+
+
+
+
+
+
