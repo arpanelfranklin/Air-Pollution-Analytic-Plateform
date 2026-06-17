@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application 
 metadata: 
   name: database-applicaiton 
-  namespace: argoCD
+  namespace: argocd
 spec: 
   project: air-pollution-analytic-project
   source: 

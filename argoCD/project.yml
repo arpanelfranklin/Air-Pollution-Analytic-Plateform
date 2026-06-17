@@ -16,8 +16,4 @@ spec:
   namespaceResourceWhitelist: 
     - group: "*"
       kind: "*"
-  roles: 
-    - name: apap-app-admins
-      description: "admins team from apap-app"
-      policies:
-       - p, proj:air-pollution-analytic-project:apap-app-admins, applications, *, air-pollution-analytic-project/*, allow
+  
