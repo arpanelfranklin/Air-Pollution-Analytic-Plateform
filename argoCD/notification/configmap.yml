@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: 
+  name: argocd-notifications-cm
+  namespace: argocd
+data: 
+  context: |
+    argocdUrl: "http://<your-argocd-server>:8080" 
+  service.email: |
+    username: $email-username
+    password: $email-password
+    host: smtp.gmail.com
+    port: 465
+    from: $email-username
+  
+  template.email-health-degraded: |
+    email:
+      subject: "[ArgoCD] {{.app.metadata.name}} health is {{.app.status.health.status}}"
+    message: |
+       Hey, hope you are doing well!
+       Application: {{.app.metadata.name}}
+       Namespace: {{.app.metadata.namespace}}
+       Sync status: {{.app.status.sync.status}}
+       Revision: {{.app.status.sync.revision}}
+       Health status: {{.app.status.health.status}}
+       Health message: {{.app.status.health.message}}
+       Last operation: {{ if .app.operationState }}{{ .app.operationState.phase }}{{ else }}<none>{{ end }}
+       Details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+       
+       Kindly check.
+       Thank you
+  template.email-deployed: | 
+    email:
+      subject: "[ArgoCD] {{.app.metadata.name}} successfully deployed 🎉"
+    message: |
+       Hey, hope you are doing well! 
+
+       Application: {{.app.metadata.name}}
+       Namespace: {{.app.metadata.namespace}}
+       Sync status: {{.app.status.sync.status}}
+       Revision: {{.app.status.sync.revision}}
+       Health status: {{.app.status.health.status}}
+       Last operation: {{ if .app.operationState }}{{ .app.operationState.phase }}{{ else }}<none>{{ end }}
+      Finished at: {{ if .app.operationState }}{{ .app.operationState.finishedAt }}{{ end }}
+       Details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+       
+       Have a great day. 
+       Thank you
+  trigger.on-health-degraded: | 
+    - when: app.status.health.status == 'Degraded'
+      send: [email-health-degraded]
+
+  trigger.on-deployed: |
+    - when: app.status.operationState.phase == 'Succeeded' and app.status.health.status == 'Healthy'
+      send: [email-deployed]
+

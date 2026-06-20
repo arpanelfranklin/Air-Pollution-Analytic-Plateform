@@ -3,6 +3,9 @@ kind: Application
 metadata: 
   name: apap-app-application 
   namespace: argocd
+  annotations: 
+    notifications.argoproj.io/subscribe.on-health-degraded.email: "arpanel07@gmail.com"
+    notifications.argoproj.io/subscribe.on-deployed.email: "arpanel07@gmail.com"
 spec: 
   project: air-pollution-analytic-project
   source: 
