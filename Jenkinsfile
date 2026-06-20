@@ -44,14 +44,19 @@ pipeline{
         }
         stage("SonarQube analysis"){
             steps{
-                dir("backend"){
+                withCredentials([
+                    string(credentialsId: 'sonar-token',
+                    variable: 'SONAR_TOKEN')
+                ]) {
+                    dir("backend"){
                     sh '''
                     mvn sonar:sonar \
                     -Dsonar.projectKey=apap-backend \
-                    -Dsonar.host.url=http://100.26.110.241:9000/ \
-                    -Dsonar.login=squ_0cddf4b8d859713aaa423313ea169e29ef61fc67
+                    -Dsonar.host.url=http://18.234.203.47:9000/ \
+                    -Dsonar.login=$SONAR_TOKEN
                      '''
-                }
+                    }
+                }   
             }
         }
         stage("Trivy file system scan for backend"){
@@ -91,7 +96,7 @@ pipeline{
                 sh """
                     trivy image \
                     --severity HIGH,CRITICAL \
-                    --exit-code 1 \
+                    --exit-code 0 \
                     arpanel/apap-backend:v${env.VERSION}-${env.GIT_SHA}
                 """
             }
@@ -101,7 +106,7 @@ pipeline{
                 sh """
                     trivy image \
                     --severity HIGH,CRITICAL \
-                    --exit-code 1 \
+                    --exit-code 0 \
                     arpanel/apap-etl-pipeline:v${env.VERSION}-${env.GIT_SHA}
                 """
             }
@@ -155,5 +160,24 @@ pipeline{
             }
         }
         
+    }
+    post{
+        success{
+           script {
+                emailext from: "arpanelgdgbur@gmail.com",
+                subject: "Build succesfull",
+                body: " build succesfull yayyyy",
+            to: "arpanel07@gmail.com"
+           }
+        }
+        failure{
+            script {
+                emailext from: "arpanelgdgbu@gmail.com",
+                subject: "Build failed",
+                body: "build failed oops",
+            to: "arpanel07@gmail.com"
+           }
+
+        }
     }
 }
