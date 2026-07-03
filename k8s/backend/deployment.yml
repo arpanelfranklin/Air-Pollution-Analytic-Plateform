@@ -4,7 +4,12 @@ metadata:
   name: backend
   namespace: airpollution
 spec:
-  replicas: 1
+  replicas: 3
+  strategy: 
+    type: RollingUpdate 
+    rollingUpdate: 
+      maxSurge: 1 
+      maxUnavailable: 0
   selector: 
     matchLabels:
       app: backend
@@ -13,22 +18,60 @@ spec:
       labels: 
         app: backend
     spec: 
+      volumes: 
+        - name: tmp
+          emptyDir: 
+            medium: Memory 
+      securityContext: 
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+        runAsGroup: 1001
       containers:
-      - name: container 
-        image: arpanel/apap-backend:v1.0.0-09d36ca
-        ports: 
-          - containerPort: 8080
-        env: 
-          - name: SPRING_DATA_MONGODB_URI
-            valueFrom: 
-              secretKeyRef: 
-                name: secret
-                key: mongo-uri 
-        resources: 
-          requests: 
-            memory: "128Mi"
-            cpu: "100m"
-          limits: 
-            memory: "256Mi"
-            cpu: "200m"
-          
+        - name: backend
+          securityContext: 
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: 
+              drop: 
+                - ALL 
+          image: arpanel/apap-backend:v1.0.0-09d36ca
+          imagePullPolicy: IfNotPresent
+          volumeMounts: 
+            - mountPath: /tmp
+              name: tmp 
+          ports: 
+            - containerPort: 8080
+          env: 
+            - name: SPRING_DATA_MONGODB_URI
+              valueFrom: 
+                secretKeyRef: 
+                  name: secret
+                  key: mongo-uri 
+          resources: 
+            requests: 
+              memory: "128Mi"
+              cpu: "100m"
+            limits: 
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe: 
+            httpGet: 
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10 
+          readinessProbe: 
+            httpGet: 
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 10 
+            periodSeconds: 5
+          startupProbe: 
+            httpGet: 
+              path: /actuator/health
+              port: 8080
+            failureThreshold: 12
+            periodSeconds: 10 
+
+            

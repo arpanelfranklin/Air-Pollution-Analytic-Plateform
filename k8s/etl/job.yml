@@ -13,10 +13,28 @@ spec:
       labels: 
         app: etl-pipeline
     spec: 
+      volumes: 
+        - name: tmp 
+          emptyDir: 
+            medium: Memory 
+      securityContext: 
+        runAsNonRoot: true
+        runAsUser: 1001
+        fsGroup: 1001
+        runAsGroup: 1001
       containers: 
         - name: etl-pipeline 
+          securityContext: 
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: 
+              drop: 
+                - ALL 
           imagePullPolicy: Always 
           image: arpanel/apap-etl-pipeline:v1.0.0-jdie8k 
+          volumeMounts: 
+            - mountPath: /tmp 
+              name: tmp 
           env:
           - name: SPRING_DATA_MONGODB_URI
             valueFrom:
