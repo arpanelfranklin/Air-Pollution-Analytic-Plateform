@@ -20,6 +20,13 @@ COPY --from=builder /backend/target/*.jar backend.jar
 #EXPOSE PORT
 EXPOSE 8080
 
+#Non Root User
+RUN groupadd -r appgroup && \
+    useradd -r -g appgroup appuser
+
+#Switch to Non root user
+USER appuser
+
 #RUN
 ENTRYPOINT ["java","-jar","backend.jar"]
 

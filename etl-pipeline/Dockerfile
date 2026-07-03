@@ -17,5 +17,12 @@ WORKDIR /etlPipeline
 #COPY DEPENDENCY FROM BUILDER
 COPY --from=builder /etlPipeline/target/*.jar etlPipeline.jar
 
+# Adding Non root user
+RUN groupadd -r appgroup && \
+    useradd -r -g appgroup appuser
+    
+# Switch to Non root user 
+USER appuser
+
 #ENTRYPOINT
 ENTRYPOINT ["java","-jar","etlPipeline.jar"]
