@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  name: apap-nginx 
+  namespace: airpollution
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec: 
+  ingressClassName: nginx
+  rules: 
+    http: 
+      paths: 
+        - pathType: Prefix 
+          path: /
+          backend: 
+            service: 
+              name: backend-service
+              port: 
+                number: 8080
+
