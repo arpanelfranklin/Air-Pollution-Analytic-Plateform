@@ -254,11 +254,11 @@ The ETL pipeline processes a global air-quality dataset containing more than **2
 | **Live API Response** | **ArgoCD Sync Status (CLI)** |
 | ![API Response](assets/screenshots/api-live-response.png) | ![ArgoCD CLI Status](assets/screenshots/argocd-cli-status.png) |
 
-> 📁 To use these embeds as-is, add your screenshots to an `assets/screenshots/` folder in the repository using the filenames referenced above.
+
 
 ---
 
-## 🧭 Getting Started
+## Getting Started
 
 ```bash
 # Clone the repository
@@ -283,7 +283,7 @@ kubectl apply -f argoCD/appOfApps/
 
 ---
 
-## 📈 Future Improvements
+## Future Improvements
 
 - Prometheus monitoring with Grafana dashboards
 - Alertmanager-based incident alerting
@@ -294,13 +294,13 @@ kubectl apply -f argoCD/appOfApps/
 
 ---
 
-## 🎯 Purpose
+## Purpose
 
 This project was built to go beyond writing an application — the focus was on understanding how modern software is actually **built, tested, secured, deployed, and operated** in production, using the same tools and workflows real engineering teams rely on every day.
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Arpanel Franklin**
 Backend & DevOps Engineer
@@ -313,6 +313,6 @@ Backend & DevOps Engineer
 
 <div align="center">
 
-### ⭐ If this project helped you understand real-world DevOps practices, consider giving it a star.
+### If this project helped you understand real world DevOps practices, consider giving it a star.
 
 </div>
