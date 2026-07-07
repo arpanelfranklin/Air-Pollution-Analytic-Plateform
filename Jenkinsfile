@@ -52,7 +52,7 @@ pipeline{
                     sh '''
                     mvn sonar:sonar \
                     -Dsonar.projectKey=apap-backend \
-                    -Dsonar.host.url=http://18.234.203.47:9000/ \
+                    -Dsonar.host.url=http://18.234.74.125:9000/ \
                     -Dsonar.login=$SONAR_TOKEN
                      '''
                     }
