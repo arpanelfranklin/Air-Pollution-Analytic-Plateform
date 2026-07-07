@@ -130,7 +130,7 @@ pipeline{
             steps{
                 sh """
                     sed -i "s|image: arpanel/apap-backend:.*|image: arpanel/apap-backend:v${VERSION}-${GIT_SHA}|" k8s/backend/deployment.yml &&
-                    sed -i "s|image: arpanel/apap-etl-pipeline:.*|image: arpanel/apap-etl-pipeline:v${VERSION}-${GIT_SHA}|" k8s/etl/cronjob.yml
+                    sed -i "s|image: arpanel/apap-etl-pipeline:.*|image: arpanel/apap-etl-pipeline:v${VERSION}-${GIT_SHA}|" k8s/etl/job.yml
                 """
                 
             }
