@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment 
+metadata: 
+  name: prometheus 
+  namespace: monitoring 
+spec: 
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: prometheus 
+  template: 
+    metadata: 
+      labels: 
+        app: prometheus 
+    spec: 
+      securityContext: 
+        runAsUser: 65534
+        runAsGroup: 65534
+        runAsNonRoot: true
+      containers: 
+        - name: prometheus 
+          image: prom/prometheus:main-distroless
+          imagePullPolicy: IfNotPresent 
+          ports: 
+            - containerPort: 9090
+          securityContext: 
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true 
+            capabilities: 
+              drop:
+                - ALL 
+          resources: 
+            requests: 
+              memory: 128Mi 
+              cpu: 100m
+            limits: 
+              memory: 200Mi 
+              cpu: 150m 
+          args:
+            - --config.file=/etc/prometheus/prometheus.yml
+            - --storage.tsdb.path=/prometheus
+          volumeMounts: 
+            - mountPath: /prometheus
+              name: prometheus-volume 
+      volumes:
+          - name: prometheus-volume
+            persistentVolumeClaim:
+              claimName: prometheus-pvc 
+
+               
+        
+
