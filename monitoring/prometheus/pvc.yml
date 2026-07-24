@@ -8,5 +8,6 @@ spec:
     requests: 
       storage: 5Gi
   storageClassName: prometheus-storage 
+  volumeMode: Filesystem
   accessModes: 
     - ReadWriteOnce

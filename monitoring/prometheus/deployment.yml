@@ -13,13 +13,15 @@ spec:
       labels: 
         app: prometheus 
     spec: 
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
       securityContext: 
         runAsUser: 65534
         runAsGroup: 65534
         runAsNonRoot: true
       containers: 
         - name: prometheus 
-          image: prom/prometheus:main-distroless
+          image: prom/prometheus:v3.5.0
           imagePullPolicy: IfNotPresent 
           ports: 
             - containerPort: 9090
@@ -34,18 +36,46 @@ spec:
               memory: 128Mi 
               cpu: 100m
             limits: 
-              memory: 200Mi 
-              cpu: 150m 
+              memory: 256Mi 
+              cpu: 200m 
           args:
             - --config.file=/etc/prometheus/prometheus.yml
             - --storage.tsdb.path=/prometheus
+            - --storage.tsdb.retention.time=15d
+            - --web.enable-lifecycle
+          startupProbe: 
+            httpGet: 
+              path: /-/healthy
+              port: 9090
+            periodSeconds: 15
+            failureThreshold: 30
+          readinessProbe: 
+            httpGet: 
+              path: /-/ready
+              port: 9090
+            initialDelaySeconds: 5
+            periodSeconds: 10 
+          livenessProbe:
+            httpGet: 
+              path: /-/healthy
+              port: 9090
+            initialDelaySeconds: 10 
+            periodSeconds: 15
+
           volumeMounts: 
             - mountPath: /prometheus
               name: prometheus-volume 
+            - name: prometheus-config 
+              mountPath: /etc/prometheus/prometheus.yml
+              subPath: prometheus.yml 
+              readOnly: true 
       volumes:
           - name: prometheus-volume
             persistentVolumeClaim:
               claimName: prometheus-pvc 
+          - name: prometheus-config 
+            configMap: 
+              name: prometheus-configmap 
 
                
         
