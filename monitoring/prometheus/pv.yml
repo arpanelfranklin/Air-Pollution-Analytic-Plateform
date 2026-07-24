@@ -6,7 +6,7 @@ metadata:
   labels: 
     app: prometheus-pv 
 spec: 
-  storageClassName: prometheus-pvc
+  storageClassName: prometheus-storage
   capacity:
     storage: 5Gi 
   accessModes: 
