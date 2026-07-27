@@ -16,10 +16,10 @@ spec:
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 30 
       securityContext: 
-        runAsGroup: 65534 
-        runAsUser: 65534 
+        runAsGroup: 472 
+        runAsUser: 472
         runAsNonRoot: true 
-        fsGroup: 65534 
+        fsGroup: 472
       containers: 
         - name: grafana 
           image: grafana/grafana:12.1.0
