@@ -20,4 +20,10 @@ data:
               - node-exporter-service.monitoring.svc.cluster.local:9100
             labels: 
               app: node-exporter 
+      - job_name: kube-state-metrics 
+        static_configs: 
+          - targets:  
+              - kube-state-service.monitoring.svc.cluster.local:8080
+            labels: 
+              app: kube-state-metrics
         
