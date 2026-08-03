@@ -1,2 +1,5 @@
 terraform 
 monitoring/node-exporter/node-*
+.DS_Store 
+assets/.DS_Store
+.idea
