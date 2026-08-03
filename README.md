@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌍 Air Pollution Analytics Platform
+# Air Pollution Analytics Platform
 
 ### A cloud-native analytics platform for collecting, processing, deploying, and serving global air-quality data — built end-to-end with modern DevOps and backend engineering practices.
 
@@ -22,7 +22,7 @@
 
 ---
 
-## 📖 Overview
+## Overview
 
 The **Air Pollution Analytics Platform** is a cloud-native backend system designed to demonstrate how a real production application is built, containerized, secured, tested, and continuously delivered — not just written and run locally.
 
@@ -34,7 +34,7 @@ The project was built in two phases: **Phase 1** established the application, th
 
 ---
 
-## ✨ Key Features
+## Key Features
 
 - **ETL Pipeline** — Ingests and processes a global dataset of over **23,000 air-quality records**, performing extraction, cleaning, transformation, duplicate detection, and loading into MongoDB.
 - **REST API Layer** — Spring Boot–powered endpoints serve pollution statistics, country/city-level breakdowns, and rankings of the most and least polluted cities.
@@ -49,7 +49,7 @@ The project was built in two phases: **Phase 1** established the application, th
 
 ---
 
-## 🏗 System Architecture
+## System Architecture
 
 The platform follows a GitOps delivery model: developers push code, Jenkins builds and validates it, and ArgoCD takes over from there — continuously syncing the Kubernetes cluster to match what's defined in Git.
 
@@ -117,7 +117,7 @@ flowchart TD
 
 ---
 
-## 🛠 Technology Stack
+## Technology Stack
 
 | Layer | Technologies |
 |---|---|
@@ -133,7 +133,7 @@ flowchart TD
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 Air-Pollution-Analytic-Platform/
@@ -161,7 +161,7 @@ Air-Pollution-Analytic-Platform/
 
 ---
 
-## 🔄 CI/CD Pipeline
+## CI/CD Pipeline
 
 Every commit runs through a fully automated pipeline before it ever reaches the cluster:
 
@@ -200,7 +200,7 @@ Deployment notifications are sent automatically on every successful sync, so the
 
 ---
 
-## 📈 Observability & Monitoring (Phase 2)
+## Observability & Monitoring (Phase 2)
 
 Phase 1 got the application running in Kubernetes. Phase 2 answers the next question every production system needs to answer: **how do you know it's actually healthy?**
 
@@ -291,7 +291,7 @@ Confirmed live in the cluster, with the full monitoring namespace running cleanl
 
 ---
 
-## 🧩 Challenges & Fixes
+## Challenges & Fixes
 
 Most of Phase 2 wasn't writing YAML from a tutorial — it was debugging why the YAML didn't work. A few of the real issues hit and resolved along the way:
 
@@ -311,7 +311,7 @@ Most of Phase 2 wasn't writing YAML from a tutorial — it was debugging why the
 
 ---
 
-## 🔐 Security Features
+## Security Features
 
 Security wasn't an afterthought — it's built into every layer of the stack.
 
@@ -333,7 +333,7 @@ Security wasn't an afterthought — it's built into every layer of the stack.
 
 ---
 
-## 🚀 Deployment
+## Deployment
 
 The platform is deployed on **AWS EC2**, running a self-hosted Kubernetes cluster with ArgoCD managing continuous delivery. Every application — the backend, the ETL job, and the MongoDB StatefulSet — is defined as its own ArgoCD Application under an App-of-Apps root, meaning the entire environment can be reconstructed from Git alone.
 
@@ -349,7 +349,7 @@ Once deployed, `kubectl get all -n airpollution` confirms the full stack running
 
 ---
 
-## 📡 REST API Reference
+## REST API Reference
 
 | Method | Endpoint | Description |
 |---|---|---|
@@ -368,7 +368,7 @@ The screenshot below shows a live response from the deployed `/pollution` endpoi
 
 ---
 
-## 📊 Dataset
+## Dataset
 
 The ETL pipeline processes a global air-quality dataset containing more than **23,000 records** spanning cities and countries worldwide. For each record, it performs:
 
@@ -380,7 +380,7 @@ The ETL pipeline processes a global air-quality dataset containing more than **2
 
 ---
 
-## 📷 Screenshots
+## Screenshots
 
 > All screenshots below were captured from the live, deployed environment.
 
@@ -403,7 +403,7 @@ The ETL pipeline processes a global air-quality dataset containing more than **2
 
 ---
 
-## 🧭 Getting Started
+## Getting Started
 
 ```bash
 # Clone the repository
@@ -428,7 +428,7 @@ kubectl apply -f argoCD/appOfApps/
 
 ---
 
-## 🗺 Roadmap
+## Roadmap
 
 **Phase 1 — Application & GitOps Delivery** ✅
 Backend, ETL pipeline, containerization, Kubernetes deployment, Jenkins CI, ArgoCD GitOps.
@@ -445,13 +445,13 @@ Kubernetes security hardening, persistent storage, Prometheus, Grafana, Node Exp
 
 ---
 
-## 🎯 Purpose
+## Purpose
 
 This project was built to go beyond writing an application — the focus was on understanding how modern software is actually **built, tested, secured, deployed, and operated** in production, using the same tools and workflows real engineering teams rely on every day.
 
 ---
 
-## 👨‍💻 Author
+## Author
 
 **Arpanel Franklin**
 Backend & DevOps Engineer
