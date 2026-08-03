@@ -45,16 +45,15 @@ pipeline{
         stage("SonarQube analysis"){
             steps{
                 withCredentials([
-                    string(credentialsId: 'sonar-token',
-                    variable: 'SONAR_TOKEN')
+                    string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')
                 ]) {
                     dir("backend"){
-                    sh '''
-                    mvn sonar:sonar \
-                    -Dsonar.projectKey=apap-backend \
-                    -Dsonar.host.url=http://18.234.74.125:9000/ \
-                    -Dsonar.login=$SONAR_TOKEN
-                     '''
+                        sh """
+                        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+                          -Dsonar.projectKey=apap-backend \
+                          -Dsonar.host.url=http://54.81.144.59:9000 \
+                          -Dsonar.token=${SONAR_TOKEN}
+                        """
                     }
                 }   
             }
@@ -144,7 +143,7 @@ pipeline{
                     passwordVariable: "GIT_PAT"
                 )
             ]){
-                sh '''
+                sh """
                     git config user.name "Jenkins"
                     git config user.email "jenkins@local"
 
@@ -155,7 +154,7 @@ pipeline{
                     git commit -m "Version update of image via Jenkins " || true
 
                     git push https://${GIT_USER}:${GIT_PAT}@github.com/arpanelfranklin/Air-Pollution-Analytic-Plateform.git HEAD:main
-                '''
+                """
                 }
             }
         }
