@@ -26,4 +26,11 @@ data:
               - kube-state-service.monitoring.svc.cluster.local:8080
             labels: 
               app: kube-state-metrics
+      - job_name: backend 
+        metrics_path: /actuator/prometheus
+        static_configs: 
+          - targets: 
+            - backend-service.airpollution.svc.cluster.local:8080
+            labels: 
+              app: backend
         
